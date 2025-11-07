@@ -11,6 +11,7 @@ export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState('');
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [notification, setNotification] = useState('');
 
   const router = useRouter();
 
@@ -35,6 +36,36 @@ export default function Dashboard() {
 
   const toggleSection = (section: string) => {
     setActiveSection(activeSection === section ? null : section);
+  };
+
+  // TESTABLE FUNCTIONALITY: Connect with language partners
+  const handleConnect = (partnerName: string) => {
+    setNotification(`Connection request sent to ${partnerName}! They'll be notified of your interest.`);
+    
+    // Clear notification after 5 seconds
+    setTimeout(() => {
+      setNotification('');
+    }, 5000);
+  };
+
+  // TESTABLE FUNCTIONALITY: Send message
+  const handleMessage = (partnerName: string) => {
+    setNotification(`Message conversation started with ${partnerName}! Check your conversations.`);
+    
+    // Clear notification after 5 seconds
+    setTimeout(() => {
+      setNotification('');
+    }, 5000);
+  };
+
+  // TESTABLE FUNCTIONALITY: Enable location
+  const handleEnableLocation = () => {
+    setNotification('Travel mode activated! Discovering local language partners near you...');
+    
+    // Clear notification after 5 seconds
+    setTimeout(() => {
+      setNotification('');
+    }, 5000);
   };
 
   if (loading) {
@@ -73,7 +104,7 @@ export default function Dashboard() {
                   <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
                 </div>
                 <div>
-                  <h4 className="font-bold text-lg">Maria J.</h4>
+                  <h4 className="font-bold text-lg text-black">Maria J.</h4>
                   <p className="text-gray-600">Spanish → English</p>
                   <div className="flex items-center space-x-1 mt-1">
                     <Star className="w-4 h-4 text-yellow-500 fill-current" />
@@ -82,7 +113,10 @@ export default function Dashboard() {
                 </div>
               </div>
               <div className="text-right">
-                <button className="bg-black text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-800 transition-all duration-300 transform hover:scale-105">
+                <button 
+                  onClick={() => handleConnect('Maria J.')}
+                  className="bg-black text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-800 transition-all duration-300 transform hover:scale-105"
+                >
                   Connect
                 </button>
                 <p className="text-xs text-gray-500 mt-2">Online now</p>
@@ -99,7 +133,7 @@ export default function Dashboard() {
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-bold text-lg">Thomas K.</h4>
+                  <h4 className="font-bold text-lg text-black">Thomas K.</h4>
                   <p className="text-gray-600">French → Italian</p>
                   <div className="flex items-center space-x-1 mt-1">
                     <Star className="w-4 h-4 text-yellow-500 fill-current" />
@@ -108,7 +142,10 @@ export default function Dashboard() {
                 </div>
               </div>
               <div className="text-right">
-                <button className="border-2 border-gray-300 text-gray-700 px-4 py-2 rounded-xl text-sm font-medium hover:border-black hover:bg-black hover:text-white transition-all duration-300">
+                <button 
+                  onClick={() => handleMessage('Thomas K.')}
+                  className="border-2 border-gray-300 text-gray-700 px-4 py-2 rounded-xl text-sm font-medium hover:border-black hover:bg-black hover:text-white transition-all duration-300"
+                >
                   Message
                 </button>
                 <p className="text-xs text-gray-500 mt-2">2h ago</p>
@@ -134,7 +171,7 @@ export default function Dashboard() {
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center justify-between">
-                    <h4 className="font-bold text-lg">Maria J.</h4>
+                    <h4 className="font-bold text-lg text-black">Maria J.</h4>
                     <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Spanish</span>
                   </div>
                   <p className="text-gray-600 truncate">Hola! How was your day? I wanted to practice some conversation about...</p>
@@ -185,11 +222,14 @@ export default function Dashboard() {
               <MapPin className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h4 className="font-bold text-lg">Discover Local Partners</h4>
+              <h4 className="font-bold text-lg text-black">Discover Local Partners</h4>
               <p className="text-gray-600">Find language partners in your current location</p>
             </div>
           </div>
-          <button className="w-full bg-black text-white py-3 px-6 rounded-xl font-medium hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 shadow-lg">
+          <button 
+            onClick={handleEnableLocation}
+            className="w-full bg-black text-white py-3 px-6 rounded-xl font-medium hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 shadow-lg"
+          >
             Enable Location & Explore
           </button>
         </div>
@@ -199,6 +239,21 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+      {/* Notification Banner */}
+      {notification && (
+        <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4">
+          <div className="max-w-6xl mx-auto flex justify-between items-center">
+            <p>{notification}</p>
+            <button 
+              onClick={() => setNotification('')}
+              className="text-green-700 hover:text-green-900"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Enhanced Header */}
       <header className="border-b border-gray-200 bg-white/90 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 py-4">
@@ -208,7 +263,7 @@ export default function Dashboard() {
                 <span className="text-white font-bold">M</span>
               </div>
               <div>
-                <h1 className="text-2xl font-bold">Mèli</h1>
+                <h1 className="text-2xl font-bold text-black">Mèli</h1>
                 <p className="text-sm text-gray-600">Building bridges between cultures</p>
               </div>
             </div>
@@ -222,22 +277,22 @@ export default function Dashboard() {
                   placeholder="Search for partners, languages, interests..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 bg-gray-100 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200 hover:bg-white"
+                  className="w-full pl-12 pr-4 py-3 bg-gray-100 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200 hover:bg-white text-black placeholder-gray-500"
                 />
               </div>
             </div>
             
             <div className="flex items-center space-x-3">
-              <button className="p-3 hover:bg-gray-100 rounded-2xl transition-all duration-200 relative">
+              <button className="p-3 hover:bg-gray-100 rounded-2xl transition-all duration-200 relative text-gray-600 hover:text-black">
                 <Bell className="w-5 h-5" />
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></div>
               </button>
-              <button className="p-3 hover:bg-gray-100 rounded-2xl transition-all duration-200">
+              <button className="p-3 hover:bg-gray-100 rounded-2xl transition-all duration-200 text-gray-600 hover:text-black">
                 <Settings className="w-5 h-5" />
               </button>
               <button 
                 onClick={handleLogout}
-                className="p-3 hover:bg-gray-100 rounded-2xl transition-all duration-200"
+                className="p-3 hover:bg-gray-100 rounded-2xl transition-all duration-200 text-gray-600 hover:text-black"
                 title="Log out"
               >
                 <LogOut className="w-5 h-5" />
@@ -267,7 +322,7 @@ export default function Dashboard() {
           <div className="p-6 bg-white rounded-2xl border border-gray-200 hover:shadow-lg transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-2xl font-bold">12</p>
+                <p className="text-2xl font-bold text-black">12</p>
                 <p className="text-sm text-gray-600">Matches</p>
               </div>
               <div className="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center">
@@ -278,7 +333,7 @@ export default function Dashboard() {
           <div className="p-6 bg-white rounded-2xl border border-gray-200 hover:shadow-lg transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-2xl font-bold">7</p>
+                <p className="text-2xl font-bold text-black">7</p>
                 <p className="text-sm text-gray-600">Day Streak</p>
               </div>
               <div className="w-12 h-12 bg-yellow-100 rounded-2xl flex items-center justify-center">
@@ -289,7 +344,7 @@ export default function Dashboard() {
           <div className="p-6 bg-white rounded-2xl border border-gray-200 hover:shadow-lg transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-2xl font-bold">42</p>
+                <p className="text-2xl font-bold text-black">42</p>
                 <p className="text-sm text-gray-600">Conversations</p>
               </div>
               <div className="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center">
@@ -300,7 +355,7 @@ export default function Dashboard() {
           <div className="p-6 bg-white rounded-2xl border border-gray-200 hover:shadow-lg transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-2xl font-bold">3</p>
+                <p className="text-2xl font-bold text-black">3</p>
                 <p className="text-sm text-gray-600">Languages</p>
               </div>
               <div className="w-12 h-12 bg-purple-100 rounded-2xl flex items-center justify-center">
@@ -328,7 +383,7 @@ export default function Dashboard() {
                     </div>
                     <div className="text-left">
                       <div className="flex items-center space-x-3 mb-2">
-                        <h3 className="text-2xl font-bold">{section.title}</h3>
+                        <h3 className="text-2xl font-bold text-black">{section.title}</h3>
                         {section.badge && (
                           <span className="bg-red-100 text-red-800 text-xs font-medium px-3 py-1 rounded-full">
                             {section.badge}
@@ -362,7 +417,7 @@ export default function Dashboard() {
         {/* Enhanced Quick Actions */}
         <div className="mt-12 p-8 bg-white rounded-3xl border border-gray-200 hover:shadow-xl transition-all duration-300">
           <div className="flex items-center justify-between mb-8">
-            <h3 className="text-2xl font-bold">Quick Actions</h3>
+            <h3 className="text-2xl font-bold text-black">Quick Actions</h3>
             <button className="flex items-center space-x-2 bg-black text-white px-6 py-3 rounded-2xl font-medium hover:bg-gray-800 transition-all duration-300">
               <Plus className="w-5 h-5" />
               <span>New Match</span>
@@ -373,14 +428,14 @@ export default function Dashboard() {
               <div className="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                 <Users className="w-6 h-6 text-blue-600" />
               </div>
-              <h4 className="font-bold text-lg mb-2">Find New Partners</h4>
+              <h4 className="font-bold text-lg text-black mb-2">Find New Partners</h4>
               <p className="text-gray-600 text-sm">Discover language partners based on your interests</p>
             </button>
             <button className="p-6 bg-gradient-to-r from-white to-gray-50 border border-gray-200 rounded-2xl text-left hover:shadow-lg transition-all duration-300 group">
               <div className="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                 <MessageCircle className="w-6 h-6 text-green-600" />
               </div>
-              <h4 className="font-bold text-lg mb-2">Practice Exercises</h4>
+              <h4 className="font-bold text-lg text-black mb-2">Practice Exercises</h4>
               <p className="text-gray-600 text-sm">Improve your skills with interactive lessons</p>
             </button>
           </div>

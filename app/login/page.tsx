@@ -42,13 +42,28 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white to-gray-50">
-      {/* Back Navigation */}
-      <div className="max-w-md mx-auto px-4 pt-8">
-        <Link href="/" className="inline-flex items-center text-gray-600 hover:text-black transition-colors mb-8">
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to home
-        </Link>
-      </div>
+      {/* Navigation */}
+      <nav className="border-b border-gray-200 bg-white/80 backdrop-blur-sm">
+        <div className="max-w-6xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-black rounded-full"></div>
+              <span className="text-2xl font-bold text-black">Mèli</span>
+            </div>
+            <div className="flex items-center space-x-6">
+              <Link href="/" className="text-gray-600 hover:text-black transition-colors font-medium">
+                Home
+              </Link>
+              <Link 
+                href="/signup" 
+                className="bg-black text-white px-6 py-3 rounded-xl font-medium hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              >
+                Sign Up
+              </Link>
+            </div>
+          </div>
+        </div>
+      </nav>
 
       {/* Login Form */}
       <div className="max-w-md mx-auto px-4 py-8">
@@ -58,7 +73,7 @@ export default function Login() {
             <div className="w-12 h-12 bg-black rounded-2xl flex items-center justify-center mx-auto mb-4">
               <span className="text-white font-bold text-lg">M</span>
             </div>
-            <h1 className="text-3xl font-bold mb-2">Welcome back</h1>
+            <h1 className="text-3xl font-bold text-black mb-2">Welcome back</h1>
             <p className="text-gray-600">Continue your language journey</p>
           </div>
 
@@ -78,7 +93,7 @@ export default function Login() {
                 required
                 value={formData.email}
                 onChange={(e) => setFormData({...formData, email: e.target.value})}
-                className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200 bg-gray-50 hover:bg-white"
+                className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200 bg-gray-50 hover:bg-white text-black placeholder-gray-500"
                 placeholder="Enter your email"
               />
             </div>
@@ -93,7 +108,7 @@ export default function Login() {
                   required
                   value={formData.password}
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
-                  className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200 bg-gray-50 hover:bg-white pr-12"
+                  className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200 bg-gray-50 hover:bg-white text-black placeholder-gray-500 pr-12"
                   placeholder="Enter your password"
                 />
                 <button
