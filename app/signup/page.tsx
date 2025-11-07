@@ -1,198 +1,113 @@
-'use client';
-
-import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Eye, EyeOff } from 'lucide-react';
-import { supabase } from '../../lib/supabaseClient';
-import { useRouter } from 'next/navigation';
+import ThemeToggle from '../components/ThemeToggle';
 
 export default function Signup() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
-  });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  const router = useRouter();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-
-    if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const { data, error } = await supabase.auth.signUp({
-        email: formData.email,
-        password: formData.password,
-        options: {
-          data: {
-            username: formData.username
-          }
-        }
-      });
-
-      if (error) {
-        setError(error.message);
-      } else {
-        // For demo purposes, automatically sign in
-        const { error: signInError } = await supabase.auth.signInWithPassword({
-          email: formData.email,
-          password: formData.password,
-        });
-
-        if (!signInError) {
-          router.push('/dashboard');
-        }
-      }
-    } catch (err) {
-      setError('An unexpected error occurred');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white to-gray-50">
-      {/* Navigation */}
-      <nav className="border-b border-gray-200 bg-white/80 backdrop-blur-sm">
+    <div className="min-h-screen bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-black">
+      <nav className="border-b border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-black rounded-full"></div>
-              <span className="text-2xl font-bold text-black">Mèli</span>
+              <div className="w-8 h-8 bg-black dark:bg-white rounded-full"></div>
+              <span className="text-2xl font-bold dark:text-white">Mèli</span>
             </div>
-            <div className="flex items-center space-x-6">
-              <Link href="/" className="text-gray-600 hover:text-black transition-colors font-medium">
-                Home
+            <div className="flex items-center space-x-4">
+              <Link href="/about" className="text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors font-medium">
+                About
               </Link>
-              <Link href="/login" className="text-gray-600 hover:text-black transition-colors font-medium">
+              <Link href="/login" className="text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors font-medium">
                 Log in
+              </Link>
+              <ThemeToggle />
+              <Link 
+                href="/signup" 
+                className="bg-black dark:bg-white text-white dark:text-black px-6 py-3 rounded-xl font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              >
+                Sign Up
               </Link>
             </div>
           </div>
         </div>
       </nav>
 
-      {/* Signup Form */}
-      <div className="max-w-md mx-auto px-4 py-8">
-        <div className="bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
-          {/* Logo */}
-          <div className="text-center mb-8">
-            <div className="w-12 h-12 bg-black rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <span className="text-white font-bold text-lg">M</span>
-            </div>
-            <h1 className="text-3xl font-bold text-black mb-2">Join Mèli</h1>
-            <p className="text-gray-600">Start your language journey today</p>
+      <main className="max-w-6xl mx-auto px-4 pt-20 pb-32">
+        <div className="max-w-md mx-auto">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl font-bold mb-4 tracking-tight dark:text-white">Join Meli</h1>
+            <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">Start your language journey today</p>
           </div>
 
-          {error && (
-            <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-xl text-sm">
-              {error}
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Username
-              </label>
-              <input
-                type="text"
-                required
-                value={formData.username}
-                onChange={(e) => setFormData({...formData, username: e.target.value})}
-                className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200 bg-gray-50 hover:bg-white text-black placeholder-gray-500"
-                placeholder="Choose a username"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Email address
-              </label>
-              <input
-                type="email"
-                required
-                value={formData.email}
-                onChange={(e) => setFormData({...formData, email: e.target.value})}
-                className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200 bg-gray-50 hover:bg-white text-black placeholder-gray-500"
-                placeholder="Enter your email"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Password
-              </label>
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  required
-                  value={formData.password}
-                  onChange={(e) => setFormData({...formData, password: e.target.value})}
-                  className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200 bg-gray-50 hover:bg-white text-black placeholder-gray-500 pr-12"
-                  placeholder="Create a password"
+          <div className="bg-white/80 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-2xl p-8 shadow-2xl">
+            <form className="space-y-6">
+              <div>
+                <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Username
+                </label>
+                <input 
+                  type="text" 
+                  id="username" 
+                  placeholder="Choose a username"
+                  className="w-full px-4 py-3 bg-white dark:bg-gray-900/50 border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white focus:border-transparent transition-all duration-300"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
               </div>
+
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Email address
+                </label>
+                <input 
+                  type="email" 
+                  id="email" 
+                  placeholder="Enter your email"
+                  className="w-full px-4 py-3 bg-white dark:bg-gray-900/50 border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white focus:border-transparent transition-all duration-300"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Password
+                </label>
+                <input 
+                  type="password" 
+                  id="password" 
+                  placeholder="Create a password"
+                  className="w-full px-4 py-3 bg-white dark:bg-gray-900/50 border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white focus:border-transparent transition-all duration-300"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Confirm Password
+                </label>
+                <input 
+                  type="password" 
+                  id="confirmPassword" 
+                  placeholder="Confirm your password"
+                  className="w-full px-4 py-3 bg-white dark:bg-gray-900/50 border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white focus:border-transparent transition-all duration-300"
+                />
+              </div>
+
+              <div className="border-t border-gray-300 dark:border-gray-700 my-8"></div>
+
+              <button 
+                type="submit"
+                className="w-full bg-black dark:bg-white text-white dark:text-black px-8 py-4 rounded-xl font-medium text-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-900"
+              >
+                Create Account
+              </button>
+            </form>
+
+            <div className="text-center mt-8">
+              <p className="text-gray-600 dark:text-gray-400">
+                Already have an account? 
+                <Link href="/login" className="text-black dark:text-white hover:text-gray-800 dark:hover:text-gray-300 font-medium transition-colors ml-1">
+                  Log in
+                </Link>
+              </p>
             </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Confirm Password
-              </label>
-              <input
-                type={showPassword ? "text" : "password"}
-                required
-                value={formData.confirmPassword}
-                onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
-                className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200 bg-gray-50 hover:bg-white text-black placeholder-gray-500"
-                placeholder="Confirm your password"
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-black text-white py-4 px-6 rounded-xl font-medium hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? 'Creating Account...' : 'Create Account'}
-            </button>
-          </form>
-
-          <div className="mt-8 text-center">
-            <p className="text-gray-600">
-              Already have an account?{' '}
-              <Link href="/login" className="text-black font-medium hover:underline">
-                Log in
-              </Link>
-            </p>
-          </div>
-
-          {/* Security Note */}
-          <div className="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-200">
-            <p className="text-xs text-gray-600 text-center">
-              Your data is encrypted and secure
-            </p>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
