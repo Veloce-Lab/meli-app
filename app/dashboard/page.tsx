@@ -4,11 +4,12 @@ import { useState, useEffect } from 'react';
 import { ChevronDown, ChevronRight, Users, MessageCircle, Award, MapPin, Settings, Bell, Search, Plus, Star, Clock, Zap, LogOut } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient';
 import { useRouter } from 'next/navigation';
+import type { User } from '@supabase/supabase-js';
 
 export default function Dashboard() {
   const [activeSection, setActiveSection] = useState<string | null>('matches');
   const [searchQuery, setSearchQuery] = useState('');
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   const router = useRouter();
